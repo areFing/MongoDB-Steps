@@ -1,0 +1,55 @@
+1.安装Homebrew
+2. brew install mongodb
+3.有时会遇到这个错，原因是看错误信息就知道了。
+ERROR: dbpath (/data/db) does not exist. Create this directory or give existing directory in –dbpath. See http://dochub.mongodb.org/core/startingandstoppingmongo
+错误信息的意思是dbpath (/data/db)不存在，需要创建/data/db这个目录或者使用--dbpath参数项指定一个已经存在的目录。
+
+dbpath (/data/db)这个目录是用来存储MongoDB数据文件的地方，既然不存在/data/db那我们就创建这个目录
+mkdir -p /data/db    创建/data/db
+
+在mac可能会遇到权限问题，
+[initandlisten] exception in initAndListen: 20 Attempted to create a lock file on a read-only directory: /data/db, terminating
+[initandlisten] shutdown: going to close listening sockets...
+[initandlisten] shutdown: going to flush diaglog...
+[initandlisten] now exiting
+[initandlisten] shutting down with code:100
+解决办法：
+try this, which will make the directory writable by everyone:
+> sudo chmod go+w /data/db
+or this, which will make the directory owned by you:
+> sudo chown user /data/db
+
+4.安装可视化工具Robomongo
+5.导出数据：通过查看Export命令，可以导出数据到csv等文件中
+Export MongoDB data to CSV, TSV or JSON files.  
+  
+options:  
+  --help                    produce help message  
+  -v [ --verbose ]          be more verbose (include multiple times for more   
+                            verbosity e.g. -vvvvv)  
+  --version                 print the program's version and exit  
+  -h [ --host ] arg         mongo host to connect to ( <set name>/s1,s2 for   
+                            sets)  
+  --port arg                server port. Can also use --host hostname:port  
+  --ipv6                    enable IPv6 support (disabled by default)  
+  -u [ --username ] arg     username  
+  -p [ --password ] arg     password  
+  --dbpath arg              directly access mongod database files in the given   
+                            path, instead of connecting to a mongod  server -   
+                            needs to lock the data directory, so cannot be used  
+                            if a mongod is currently accessing the same path  
+  --directoryperdb          if dbpath specified, each db is in a separate   
+                            directory  
+  --journal                 enable journaling  
+  -d [ --db ] arg           database to use  
+  -c [ --collection ] arg   collection to use (some commands)  
+  -f [ --fields ] arg       comma separated list of field names e.g. -f   
+                            name,age  
+  --fieldFile arg           file with fields names - 1 per line  
+  -q [ --query ] arg        query filter, as a JSON string  
+  --csv                     export to csv instead of json  
+  -o [ --out ] arg          output file; if not specified, stdout is used  
+  --jsonArray               output to a json array rather than one object per line  
+  -k [ --slaveOk ] arg (=1) use secondaries for export if available, default true  
+  
+  eg:mongoexport -d admin -c TomorrowFinance -o Tomorrow.json
